@@ -1,0 +1,31 @@
+Copyright (c) 2026 Catman2608 ([https://github.com/Catman2608])
+All Rights Reserved.
+
+END USER LICENSE AGREEMENT (EULA)
+
+This Agreement governs the use of the AHK script provided by Catman2608 (“Licensor”). By using the script (“Software”), you (“Licensee”) agree to these terms.
+
+GRANT OF LICENSE
+Licensor grants a limited, non-transferable, revocable license to use the Software for personal use only.
+License grants permission to copy, modify, adapt, reverse engineer, decompile, or attempt to alter the Software.
+
+RESTRICTIONS
+Licensee shall not:
+
+Publish, share, sell, lease, or distribute the Software or derivatives.
+
+Remove or alter copyright notices or credits.
+
+Use the Software for unlawful or commercial purposes.
+
+OWNERSHIP
+The Software is licensed, not sold. All rights remain with the Licensor.
+
+TERMINATION
+Violation of any terms results in automatic termination of this license. Upon termination, cease all use and destroy copies.
+
+ENFORCEMENT
+Licensor may pursue legal action for violations, including unauthorized distribution or tampering.
+
+DISCLAIMER & LIABILITY
+The Software is provided “as is” without warranty. Licensor is not liable for damages arising from its use.
