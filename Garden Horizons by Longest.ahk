@@ -1,5 +1,5 @@
 ﻿; ============================================================
-; Garden Horizons Macro V1.0
+; Garden Horizons V1.1 by Longest
 ; ============================================================
 #SingleInstance Force
 FileEncoding, UTF-8
@@ -49,9 +49,9 @@ TooltipX := A_ScreenWidth * 0.15
 Tooltip1 := A_ScreenHeight * 0.25
 
 ; === Item Arrays ===
-seedItems := ["Carrot Seed", "Corn Seed", "Onion Seed", "Strawberry Seed", "Mushroom Seed", "Beetroot Seed", "Tomato Seed", "Apple Seed", "Rose Seed", "Wheat Seed", "Banana Seed", "Plum Seed", "Potato Seed", "Cabbage Seed", "Cherry Seed"]
+seedItems := ["Carrot Seed", "Corn Seed", "Onion Seed", "Strawberry Seed", "Mushroom Seed", "Beetroot Seed", "Tomato Seed", "Apple Seed", "Rose Seed", "Wheat Seed", "Banana Seed", "Plum Seed", "Potato Seed", "Cabbage Seed", "Cherry Seed", "Bamboo Seed", "Mango Seed"]
 
-gearItems := ["Watering Can", "Basic Sprinkler", "Harvest Bell", "Turbo Sprinkler", "Favorite Tool", "Super Sprinkler"]
+gearItems := ["Watering Can", "Basic Sprinkler", "Harvest Bell", "Turbo Sprinkler", "Favorite Tool", "Super Sprinkler", "Trowel"]
 
 ; === Buttons ===
 Gui, Tab,
@@ -61,7 +61,7 @@ Gui, Font, s9 cWhite Norm, Segoe UI
 Gui, Add, Button, x40 y580 w100 h30 gStartClicked, 🚀 Start
 Gui, Add, Button, x160 y580 w100 h30 gSaveSettings, 💾 Save
 Gui, Add, Button, x280 y580 w100 h30 gLoadSettings, 📂 Load
-Gui, Add, Text, x600 y600 , V1.0
+Gui, Add, Text, x600 y600 , V1.1
 Gui, Font, s9 c0xFFFFFF, Segoe UI  ; reset for normal text
 
 ; === Seeds Tab ===
@@ -159,7 +159,7 @@ Gui, Add, Picture, x50 y60 w48 h48, % mainDir "Images\\ICantGarden.png"
 Gui, Font, s9 cFFD700 Bold
 Gui, Add, Text, x110 y60 w350, Catman2608
 Gui, Font, s9 cFFC0CB Bold
-Gui, Add, Text, x110 y80 w350, Garden Horizons Macro [V1.0]
+Gui, Add, Text, x110 y80 w350, Garden Horizons Macro [V1.1]
 Gui, Font, s9 cFFFFFF Norm
 
 ; Disclaimer section
@@ -178,7 +178,7 @@ Gui, Font, s9 cFFFFFF Norm
 Gui, Add, Link, x50 y250 w560, <a href="https://discord.gg/aMZY8yrF8r">Join ICF Automation Network Discord</a>
 Gui, Add, Link, x50 y280 w560, <a href="https://sites.google.com/view/icf-automation-network/">ICF Automation Network Website</a>
 Gui, Add, Text, x50 y310 w560, If it’s your first time, check all boxes in Settings.
-Gui, Add, Link, x50 y340 w560, <a href="https://docs.google.com/document/d/1UT3I6UCcKv6wM4szNx0ulL1otYwrXciAEWwtXm5flQ8/edit?usp=sharing">View and Fix Current Problems</a>
+Gui, Add, Link, x50 y340 w560, <a href="https://docs.google.com/document/d/1WwWWMR-eN-R-GO42IioToHpWTgiXkLoiNE_4NeE-GsU/edit?usp=sharing">Future Macro Plans</a>
 
 ; Show Window
 Gui, Show
@@ -540,6 +540,8 @@ if (CheckSeedShop) {
                 Send, {Up}
                 Sleep, 100
                 Send, {Up}
+                Sleep, 100
+                Send, {Right}
                 Sleep, 350
                 Send, {Enter}
                 Sleep, 350
@@ -567,17 +569,16 @@ if (CheckGearShop) {
         Send, %NavigationKey%
         Sleep, 350
         AutoAlignShop()
-        Loop % GearItems.MaxIndex() {
+        Loop % gearItems.MaxIndex() {
                 idx := A_Index
-                GuiControlGet, isChecked,, Gear_%idx%
+
+                GuiControlGet, isChecked,, Gear%idx%
+                GearName := gearItems[idx]
+
                 Sleep, 350
                 Tooltip, %GearName%, %TooltipX%, %Tooltip1%, 1
-                if (isChecked) {
-                        ; Show tooltip for current Gear being purchased
-                        GearName := GearItems[idx]
-                        Sleep, 350
 
-                        ; Select Gear
+                if (isChecked) {
                         Send, {Enter}
                         Sleep, %SmallSleepAmount%
                         Send, {Down}
@@ -586,11 +587,12 @@ if (CheckGearShop) {
                         Sleep, %SmallSleepAmount%
                         Send, {Left}
                         Sleep, 350
-                        ; Purchase multiple items
+
                         Loop, %NoOfItems% {
                                 Send, {Enter}
                                 Sleep, %SmallSleepAmount%
                         }
+
                         Send, {Up}
                         Sleep, %SmallSleepAmount%
                         Send, {Enter}
@@ -600,14 +602,13 @@ if (CheckGearShop) {
                         Send, {Down}
                         Sleep, 350
                 } else {
-                        ; Skip unchecked Gear
                         Send, {Down}
                         Sleep, %SmallSleepAmount%
                         Send, {Down}
                         Sleep, 100
                 }
         }
-        Loop % GearItems.MaxIndex() {
+        Loop % gearItems.MaxIndex() {
                 Send, {Up}
                 Sleep, 350
                 Send, {Up}
@@ -616,10 +617,24 @@ if (CheckGearShop) {
                 Send, {Up}
                 Sleep, 100
                 Send, {Up}
+                Sleep, 100
+                Send, {Right}
                 Sleep, 350
                 Send, {Enter}
                 Sleep, 350
 		Send, %NavigationKey%
+}
+if (AdminAbuse == false) {
+        Loop
+        {
+                FormatTime, CurrentMin,, m                ; Get current minute (00–59)
+                if (Mod(CurrentMin, 5) = 0)   ; Check if divisible by 5
+                break
+                Sleep, 1000   ; wait 1 second before checking again
+                Sleep, %SmallSleepAmount%
+        }
+        ; Use ID 7 for waiting tooltip
+        ToolTip, Waiting for next stock, %TooltipX%, %Tooltip7%, 7
 }
 return
 
