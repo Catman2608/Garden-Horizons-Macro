@@ -1,5 +1,5 @@
 ﻿; ============================================================
-; Garden Horizons V1.1 by Longest
+; Garden Horizons V1.11 by Longest
 ; ============================================================
 #SingleInstance Force
 FileEncoding, UTF-8
@@ -61,7 +61,7 @@ Gui, Font, s9 cWhite Norm, Segoe UI
 Gui, Add, Button, x40 y580 w100 h30 gStartClicked, 🚀 Start
 Gui, Add, Button, x160 y580 w100 h30 gSaveSettings, 💾 Save
 Gui, Add, Button, x280 y580 w100 h30 gLoadSettings, 📂 Load
-Gui, Add, Text, x600 y600 , V1.1
+Gui, Add, Text, x600 y600 , V1.11
 Gui, Font, s9 c0xFFFFFF, Segoe UI  ; reset for normal text
 
 ; === Seeds Tab ===
@@ -124,16 +124,12 @@ Gui, Add, Text, x50 y70, Macro Speed:
 Gui, Add, Edit, x200 y70 w100 vMacroSpeed cBlack, 1
 Gui, Add, Text, x50 y100, UI Navigation Key:
 Gui, Add, Edit, x200 y100 w100 vNavigationKey cBlack, \
-Gui, Add, Text, x50 y130, Backpack Key:
-Gui, Add, ComboBox, x200 y130 w100 vBackpackKey, ```|~
+
 Gui, Add, Text, x50 y160, Auto Align:
 Gui, Add, Checkbox, x200 y160 vAutoAlign, Enable
-Gui, Add, Text, x50 y190, Auto Collect Cash:
-Gui, Add, Checkbox, x200 y190 vAutoCollectCash, Enable
-Gui, Add, Text, x50 y220, Auto Brainrot Invasion:
-Gui, Add, Checkbox, x200 y220 vAutoBrainrotInvasion, Enable
+
 Gui, Add, Text, x50 y250, Private Server Link:
-Gui, Add, Edit, x200 y250 w400 vPrivateServerLink cBlack, [Enter Private Server Link Here]
+Gui, Add, Edit, x200 y250 w400 vPrivateServerLink cBlack, 1
 
 ; Advanced Settings
 Gui, Font, 129 c0xFFD70A Bold
@@ -142,8 +138,7 @@ Gui, Font, 129 cWhite Norm
 
 Gui, Add, Text, x50 y360, Amount of items to buy:
 Gui, Add, Edit, x200 y360 w100 vNoOfItems cBlack, 20
-Gui, Add, Text, x50 y390, Purchase Delay:
-Gui, Add, Edit, x200 y390 w100 vPurchaseDelay cBlack, 750
+
 Gui, Add, Text, x50 y420, Admin Abuse:
 Gui, Add, Checkbox, x200 y420 vAdminAbuse, Enable
 
@@ -159,7 +154,7 @@ Gui, Add, Picture, x50 y60 w48 h48, % mainDir "Images\\ICantGarden.png"
 Gui, Font, s9 cFFD700 Bold
 Gui, Add, Text, x110 y60 w350, Catman2608
 Gui, Font, s9 cFFC0CB Bold
-Gui, Add, Text, x110 y80 w350, Garden Horizons Macro [V1.1]
+Gui, Add, Text, x110 y80 w350, I Can't Garden [V1.11]
 Gui, Font, s9 cFFFFFF Norm
 
 ; Disclaimer section
@@ -531,6 +526,8 @@ if (CheckSeedShop) {
                         Sleep, 100
                 }
         }
+        Send, {Right}
+        Sleep, 100
         Loop % seedItems.MaxIndex() {
                 Send, {Up}
                 Sleep, 350
@@ -608,6 +605,8 @@ if (CheckGearShop) {
                         Sleep, 100
                 }
         }
+        Send, {Right}
+        Sleep, 100
         Loop % gearItems.MaxIndex() {
                 Send, {Up}
                 Sleep, 350
