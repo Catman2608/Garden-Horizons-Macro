@@ -137,7 +137,7 @@ Gui, Add, GroupBox, x30 y330 w600 h210, Advanced Settings
 Gui, Font, 129 cWhite Norm
 
 Gui, Add, Text, x50 y360, Amount of items to buy:
-Gui, Add, Edit, x200 y360 w100 vNoOfItems cBlack, 20
+Gui, Add, Edit, x200 y360 w100 vNoOfItems cBlack, 5
 
 Gui, Add, Text, x50 y420, Admin Abuse:
 Gui, Add, Checkbox, x200 y420 vAdminAbuse, Enable
@@ -194,40 +194,25 @@ SaveSettings:
         GuiControlGet, CheckSeedShop
         GuiControlGet, CheckGearShop
         GuiControlGet, CheckEventShop
-	GuiControlGet, AutoBrainrotInvasion
         GuiControlGet, AutoAlign
         GuiControlGet, NoOfItems
-        GuiControlGet, PurchaseDelay
         GuiControlGet, MacroSpeed
         GuiControlGet, PrivateServerLink
 
         GuiControlGet, AdminAbuse
-        GuiControlGet, AutoCollectCash
         GuiControlGet, NavigationKey
-        GuiControlGet, BackpackKey
-
-        GuiControlGet, SendDiscordMessages
-        GuiControlGet, DiscordUserID
-        GuiControlGet, WebhookURL
 
         IniWrite, %CheckSeedShop%, %settingsFile%, Settings, CheckSeedShop
         IniWrite, %CheckGearShop%, %settingsFile%, Settings, CheckGearShop
         IniWrite, %CheckEventShop%, %settingsFile%, Settings, CheckEventShop
-        IniWrite, %AutoBrainrotInvasion%, %settingsFile%, Settings, AutoBrainrotInvasion
         IniWrite, %AutoAlign%, %settingsFile%, Settings, AutoAlign
+
         IniWrite, %NoOfItems%, %settingsFile%, Settings, NoOfItems
-        IniWrite, %PurchaseDelay%, %settingsFile%, Settings, PurchaseDelay
         IniWrite, %MacroSpeed%, %settingsFile%, Settings, MacroSpeed
         IniWrite, %PrivateServerLink%, %settingsFile%, Settings, PrivateServerLink
 
         IniWrite, %AdminAbuse%, %settingsFile%, Settings, AdminAbuse
-        IniWrite, %AutoCollectCash%, %settingsFile%, Settings, AutoCollectCash
         IniWrite, %NavigationKey%, %settingsFile%, Settings, NavigationKey
-        IniWrite, %BackpackKey%, %settingsFile%, Settings, BackpackKey
-
-	IniWrite, %SendDiscordMessages%, %settingsFile%, Discord Webhooks, SendDiscordMessages
-	IniWrite, %DiscordUserID%, %settingsFile%, Discord Webhooks, DiscordUserID
-	IniWrite, %WebhookURL%, %settingsFile%, Discord Webhooks, WebhookURL
 
         ; Save seeds
         Loop % seedItems.MaxIndex()
@@ -261,41 +246,28 @@ LoadSettings() {
         IniRead, CheckSeedShop, %settingsFile%, Settings, CheckSeedShop, 0
         IniRead, CheckGearShop, %settingsFile%, Settings, CheckGearShop, 0
         IniRead, CheckEventShop, %settingsFile%, Settings, CheckEventShop, 0
-        IniRead, AutoBrainrotInvasion, %settingsFile%, Settings, AutoBrainrotInvasion, 0
         IniRead, AutoAlign, %settingsFile%, Settings, AutoAlign, 0
         IniRead, NoOfItems, %settingsFile%, Settings, NoOfItems, 5
-        IniRead, PurchaseDelay, %settingsFile%, Settings, PurchaseDelay, 5
         IniRead, MacroSpeed, %settingsFile%, Settings, MacroSpeed, 5
         IniRead, PrivateServerLink, %settingsFile%, Settings, PrivateServerLink, 5
 
         IniRead, AdminAbuse, %settingsFile%, Settings, AdminAbuse, 0
-        IniRead, AutoCollectCash, %settingsFile%, Settings, AutoCollectCash, 0
         IniRead, NavigationKey, %settingsFile%, Settings, NavigationKey, \
         IniRead, BackpackKey, %settingsFile%, Settings, BackpackKey, %BackpackKey%
-
-	IniRead, SendDiscordMessages, %settingsFile%, Discord Webhooks, SendDiscordMessages, 0
-	IniRead, DiscordUserID, %settingsFile%, Discord Webhooks, DiscordUserID, 0
-	IniRead, WebhookURL, %settingsFile%, Discord Webhooks, WebhookURL, 0
 
         ; Update GUI controls 
         GuiControl,, CheckSeedShop, %CheckSeedShop%
         GuiControl,, CheckGearShop, %CheckGearShop%
         GuiControl,, CheckEventShop, %CheckEventShop%
-        GuiControl,, AutoBrainrotInvasion, %AutoBrainrotInvasion%
+
         GuiControl,, AutoAlign, %AutoAlign%
         GuiControl,, NoOfItems, %NoOfItems%
-        GuiControl,, PurchaseDelay, %PurchaseDelay%
         GuiControl,, MacroSpeed, %MacroSpeed%
         GuiControl,, PrivateServerLink, %PrivateServerLink%
 
         GuiControl,, AdminAbuse, %AdminAbuse%
-        GuiControl,, AutoCollectCash, %AutoCollectCash%
         GuiControl,, NavigationKey, %NavigationKey%
         GuiControl,, BackpackKey, %BackpackKey%
-
-        GuiControl,, SendDiscordMessages, %SendDiscordMessages%
-        GuiControl,, DiscordUserID, %DiscordUserID%
-        GuiControl,, WebhookURL, %WebhookURL%
 
         ; Load seeds
         Loop % seedItems.MaxIndex()
@@ -392,8 +364,8 @@ RunMacro:
 ; === Macro logic ===
 
 ToolTip, Beginning Alignment, %TooltipX%, %Tooltip1%, 1
-SmallSleepAmount := 150 / MacroSpeed
-MediumSleepAmount := 250 / MacroSpeed
+SmallSleepAmount := 100 / MacroSpeed
+MediumSleepAmount := 200 / MacroSpeed
 ShopDelayAmount := 2250
 if (!macroRunning)
     return
