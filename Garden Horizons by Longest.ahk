@@ -1,5 +1,5 @@
 ﻿; ============================================================
-; Garden Horizons V1.11 by Longest
+; Garden Horizons V1.2 by Longest
 ; ============================================================
 #SingleInstance Force
 FileEncoding, UTF-8
@@ -49,9 +49,9 @@ TooltipX := A_ScreenWidth * 0.15
 Tooltip1 := A_ScreenHeight * 0.25
 
 ; === Item Arrays ===
-seedItems := ["Carrot Seed", "Corn Seed", "Onion Seed", "Strawberry Seed", "Mushroom Seed", "Beetroot Seed", "Tomato Seed", "Apple Seed", "Rose Seed", "Wheat Seed", "Banana Seed", "Plum Seed", "Potato Seed", "Cabbage Seed", "Cherry Seed", "Bamboo Seed", "Mango Seed"]
+seedItems := ["Carrot Seed", "Corn Seed", "Onion Seed", "Strawberry Seed", "Mushroom Seed", "Beetroot Seed", "Tomato Seed", "Apple Seed", "Rose Seed", "Wheat Seed", "Banana Seed", "Plum Seed", "Potato Seed", "Cabbage Seed", "Cherry Seed", "Bamboo Seed", "Mango Seed", "Watermelon Seed", "Pineapple Seed"]
 
-gearItems := ["Watering Can", "Basic Sprinkler", "Harvest Bell", "Turbo Sprinkler", "Favorite Tool", "Super Sprinkler", "Trowel"]
+gearItems := ["Watering Can", "Basic Sprinkler", "Harvest Bell", "Turbo Sprinkler", "Favorite Tool", "Super Sprinkler", "Trowel", "Reverter"]
 
 ; === Buttons ===
 Gui, Tab,
@@ -61,7 +61,7 @@ Gui, Font, s9 cWhite Norm, Segoe UI
 Gui, Add, Button, x40 y580 w100 h30 gStartClicked, 🚀 Start
 Gui, Add, Button, x160 y580 w100 h30 gSaveSettings, 💾 Save
 Gui, Add, Button, x280 y580 w100 h30 gLoadSettings, 📂 Load
-Gui, Add, Text, x600 y600 , V1.11
+Gui, Add, Text, x600 y600 , V1.2
 Gui, Font, s9 c0xFFFFFF, Segoe UI  ; reset for normal text
 
 ; === Seeds Tab ===
@@ -78,7 +78,7 @@ Loop % seedItems.MaxIndex()
         idx := A_Index
         Gui, Add, Checkbox, x%xPos% y%yPos% vSeed_%idx%, % seedItems[idx]
         yPos += 25
-        if (yPos > 550) {
+        if (yPos > 500) {
                 yPos := 100
                 col++
                 xPos := 50 + (col * 150)
@@ -97,7 +97,7 @@ Loop % gearItems.MaxIndex()
         idx := A_Index
         Gui, Add, Checkbox, x%xPos% y%yPos% vGear%idx%, % gearItems[idx]
         yPos += 25
-        if (yPos > 550) {
+        if (yPos > 500) {
                 yPos := 100
                 col++
                 xPos := 50 + (col * 150)
@@ -154,7 +154,7 @@ Gui, Add, Picture, x50 y60 w48 h48, % mainDir "Images\\ICantGarden.png"
 Gui, Font, s9 cFFD700 Bold
 Gui, Add, Text, x110 y60 w350, Catman2608
 Gui, Font, s9 cFFC0CB Bold
-Gui, Add, Text, x110 y80 w350, I Can't Garden [V1.11]
+Gui, Add, Text, x110 y80 w350, I Can't Garden [V1.2]
 Gui, Font, s9 cFFFFFF Norm
 
 ; Disclaimer section
@@ -489,13 +489,13 @@ if (CheckSeedShop) {
         Loop % seedItems.MaxIndex() {
                 idx := A_Index
                 GuiControlGet, isChecked,, Seed_%idx%
-                Sleep, 350
                 Tooltip, %seedName%, %TooltipX%, %Tooltip1%, 1
+                Sleep, %SmallSleepAmount%
                 if (isChecked) {
                         ; Show tooltip for current seed being purchased
                         seedName := seedItems[idx]
                         Sleep, 350
-
+                	Tooltip, %seedName%, %TooltipX%, %Tooltip1%, 1
                         ; Select seed
                         Send, {Enter}
                         Sleep, %SmallSleepAmount%
@@ -515,9 +515,9 @@ if (CheckSeedShop) {
                         Send, {Enter}
                         Sleep, 350
                         Send, {Down}
-                        Sleep, 350
+                        Sleep, %SmallSleepAmount%
                         Send, {Down}
-                        Sleep, 350
+                        Sleep, %SmallSleepAmount%
                 } else {
                         ; Skip unchecked seed
                         Send, {Down}
@@ -530,9 +530,9 @@ if (CheckSeedShop) {
         Sleep, 100
         Loop % seedItems.MaxIndex() {
                 Send, {Up}
-                Sleep, 350
+                Sleep, %SmallSleepAmount%
                 Send, {Up}
-                Sleep, 350
+                Sleep, %SmallSleepAmount%
         }
                 Send, {Up}
                 Sleep, 100
@@ -568,14 +568,12 @@ if (CheckGearShop) {
         AutoAlignShop()
         Loop % gearItems.MaxIndex() {
                 idx := A_Index
-
                 GuiControlGet, isChecked,, Gear%idx%
                 GearName := gearItems[idx]
-
-                Sleep, 350
+                Sleep, %SmallSleepAmount%
                 Tooltip, %GearName%, %TooltipX%, %Tooltip1%, 1
-
                 if (isChecked) {
+			Tooltip, %GearName%, %TooltipX%, %Tooltip1%, 1
                         Send, {Enter}
                         Sleep, %SmallSleepAmount%
                         Send, {Down}
@@ -595,9 +593,9 @@ if (CheckGearShop) {
                         Send, {Enter}
                         Sleep, 350
                         Send, {Down}
-                        Sleep, 350
+                        Sleep, %SmallSleepAmount%
                         Send, {Down}
-                        Sleep, 350
+                        Sleep, %SmallSleepAmount%
                 } else {
                         Send, {Down}
                         Sleep, %SmallSleepAmount%
@@ -609,9 +607,9 @@ if (CheckGearShop) {
         Sleep, 100
         Loop % gearItems.MaxIndex() {
                 Send, {Up}
-                Sleep, 350
+                Sleep, %SmallSleepAmount%
                 Send, {Up}
-                Sleep, 350
+                Sleep, %SmallSleepAmount%
         }
                 Send, {Up}
                 Sleep, 100
@@ -626,14 +624,13 @@ if (CheckGearShop) {
 if (AdminAbuse == false) {
         Loop
         {
-                FormatTime, CurrentMin,, m                ; Get current minute (00–59)
+                FormatTime, CurrentMin,, m  ; Get current minute (00–59)
+        	ToolTip, Waiting for next stock, %TooltipX%, %Tooltip7%, 7
                 if (Mod(CurrentMin, 5) = 0)   ; Check if divisible by 5
                 break
                 Sleep, 1000   ; wait 1 second before checking again
                 Sleep, %SmallSleepAmount%
         }
-        ; Use ID 7 for waiting tooltip
-        ToolTip, Waiting for next stock, %TooltipX%, %Tooltip7%, 7
 }
 return
 
