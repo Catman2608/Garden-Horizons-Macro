@@ -37,7 +37,7 @@ settingsFile := "settings.ini"
 Gui, +Resize +MinSize
 Gui, Color, 0x1D1D1D
 Gui, Font, s9 cFFFFFF, Segoe UI  ; Reduced from s9 to s9 for better sizing
-Gui, Add, Tab2, w660 h630, Seeds|Gears|Event|Settings|About ; Discord Webhooks
+Gui, Add, Tab2, w660 h630, Seeds|Gears|Event|Settings|Discord Webhooks|About
 
 ; === Screen Coordinates ===
 ClickX := A_ScreenWidth / 1920
