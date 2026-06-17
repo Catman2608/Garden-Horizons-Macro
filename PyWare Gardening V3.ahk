@@ -1,5 +1,5 @@
 ﻿; ============================================================
-; Garden Horizons V1.2 by Longest
+; PyWare Gardening V3.0
 ; ============================================================
 #SingleInstance Force
 FileEncoding, UTF-8
@@ -32,15 +32,12 @@ if (ErrorLevel) {
 ; === Initialize settings file path ===
 settingsFile := "settings.ini"
 
-; === Load settings when script starts ===
-LoadSettings()
-
 ; The GUI section below uses 0xRRGGBB instead of 0xBBGGRR unlike the other sections
 
 Gui, +Resize +MinSize
 Gui, Color, 0x1D1D1D
-Gui, Font, s9 cFFFFFF, Segoe UI
-Gui, Add, Tab2, w660 h630, Seeds|Gears|Event|Settings|About
+Gui, Font, s9 cFFFFFF, Segoe UI  ; Reduced from s9 to s9 for better sizing
+Gui, Add, Tab2, w660 h630, Seeds|Gears|Event|Settings|About ; Discord Webhooks
 
 ; === Screen Coordinates ===
 ClickX := A_ScreenWidth / 1920
@@ -49,9 +46,9 @@ TooltipX := A_ScreenWidth * 0.15
 Tooltip1 := A_ScreenHeight * 0.25
 
 ; === Item Arrays ===
-seedItems := ["Carrot Seed", "Corn Seed", "Onion Seed", "Strawberry Seed", "Mushroom Seed", "Beetroot Seed", "Tomato Seed", "Apple Seed", "Rose Seed", "Wheat Seed", "Banana Seed", "Plum Seed", "Potato Seed", "Cabbage Seed", "Cherry Seed", "Bamboo Seed", "Mango Seed", "Watermelon Seed", "Pineapple Seed"]
+seedItems := ["Carrot", "Strawberry", "Blueberry", "Tulip", "Tomato", "Apple", "Bamboo", "Corn", "Cactus", "Pineapple", "Mushroom", "Green Bean", "Banana", "Grape", "Coconut", "Mango", "Dragon Fruit", "Acorn", "Cherry", "Venus Flytrap", "Pomegranate", "Poison Apple", "Moon Bloom", "Dragon's Breath"]
 
-gearItems := ["Watering Can", "Basic Sprinkler", "Harvest Bell", "Turbo Sprinkler", "Favorite Tool", "Super Sprinkler", "Trowel", "Reverter"]
+gearItems := ["Water Bucket", "Frost Grenade", "Banana Gun", "Frost Blower", "Carrot Launcher"]
 
 ; === Buttons ===
 Gui, Tab,
@@ -61,7 +58,7 @@ Gui, Font, s9 cWhite Norm, Segoe UI
 Gui, Add, Button, x40 y580 w100 h30 gStartClicked, 🚀 Start
 Gui, Add, Button, x160 y580 w100 h30 gSaveSettings, 💾 Save
 Gui, Add, Button, x280 y580 w100 h30 gLoadSettings, 📂 Load
-Gui, Add, Text, x600 y600 , V1.2
+Gui, Add, Text, x600 y600 , V1.5
 Gui, Font, s9 c0xFFFFFF, Segoe UI  ; reset for normal text
 
 ; === Seeds Tab ===
@@ -97,7 +94,7 @@ Loop % gearItems.MaxIndex()
         idx := A_Index
         Gui, Add, Checkbox, x%xPos% y%yPos% vGear%idx%, % gearItems[idx]
         yPos += 25
-        if (yPos > 500) {
+        if (yPos > 550) {
                 yPos := 100
                 col++
                 xPos := 50 + (col * 150)
@@ -117,30 +114,40 @@ Gui, Tab, Settings
 
 ; Basic Settings
 Gui, Font, s9 c0xFFD70A Bold
-Gui, Add, GroupBox, x30 y40 w600 h280, Basic Settings
+Gui, Add, GroupBox, x30 y40 w600 h280, Settings
 Gui, Font, s9 cWhite Norm
 
 Gui, Add, Text, x50 y70, Macro Speed:
 Gui, Add, Edit, x200 y70 w100 vMacroSpeed cBlack, 1
 Gui, Add, Text, x50 y100, UI Navigation Key:
 Gui, Add, Edit, x200 y100 w100 vNavigationKey cBlack, \
+Gui, Add, Text, x50 y130, Auto Align:
+Gui, Add, Checkbox, x200 y130 vAutoAlign, Enable
 
-Gui, Add, Text, x50 y160, Auto Align:
-Gui, Add, Checkbox, x200 y160 vAutoAlign, Enable
-
-Gui, Add, Text, x50 y250, Private Server Link:
-Gui, Add, Edit, x200 y250 w400 vPrivateServerLink cBlack, 1
+Gui, Add, Text, x50 y160, Amount of items to buy:
+Gui, Add, Edit, x200 y160 w100 vNoOfItems cBlack, 20
+Gui, Add, Text, x50 y190, Admin Abuse:
+Gui, Add, Checkbox, x200 y190 vAdminAbuse, Enable
 
 ; Advanced Settings
 Gui, Font, 129 c0xFFD70A Bold
-Gui, Add, GroupBox, x30 y330 w600 h210, Advanced Settings
+Gui, Add, GroupBox, x30 y330 w600 h210, Other Settings
 Gui, Font, 129 cWhite Norm
 
-Gui, Add, Text, x50 y360, Amount of items to buy:
-Gui, Add, Edit, x200 y360 w100 vNoOfItems cBlack, 5
+; === Discord Webhooks Tab ===
+Gui, Tab, Discord Webhooks
 
-Gui, Add, Text, x50 y420, Admin Abuse:
-Gui, Add, Checkbox, x200 y420 vAdminAbuse, Enable
+Gui, Font, s9 c0xA226E1 Bold
+Gui, Add, GroupBox, x30 y40 w600 h500, Discord Webhooks (broken)
+Gui, Font, s9 cWhite Norm
+
+Gui, Add, Text, x50 y70, Send Discord Messages
+Gui, Add, Checkbox, x200 y70 vSendDiscordMessages, Enable
+Gui, Add, Text, x50 y100, Discord User ID:
+Gui, Add, Edit, x200 y100 w270 vDiscordUserID cBlack, 0
+Gui, Add, Text, x50 y130, Webhook URL:
+Gui, Add, Edit, x200 y130 w270 vWebhookURL cBlack, 0
+Gui, Add, Button, x50 y160 w100 h30 gTestWebhooks, 🧪Test
 
 ; === About Tab ===
 Gui, Tab, About
@@ -150,11 +157,11 @@ Gui, Font, s9 cFFFFFF Bold
 Gui, Add, GroupBox, x30 y40 w600 h160, About this macro
 Gui, Font, s9 cFFFFFF Norm
 
-Gui, Add, Picture, x50 y60 w48 h48, % mainDir "Images\\ICantGarden.png"
+Gui, Add, Picture, x50 y60 w48 h48, % mainDir "Images\\PyWareGardening.png"
 Gui, Font, s9 cFFD700 Bold
 Gui, Add, Text, x110 y60 w350, Catman2608
 Gui, Font, s9 cFFC0CB Bold
-Gui, Add, Text, x110 y80 w350, I Can't Garden [V1.2]
+Gui, Add, Text, x110 y80 w350, PyWare Gardening V3.0
 Gui, Font, s9 cFFFFFF Norm
 
 ; Disclaimer section
@@ -170,10 +177,12 @@ Gui, Add, GroupBox, x30 y220 w600 h180, Resources
 Gui, Font, s9 cFFFFFF Norm
 
 ; Links with proper spacing
-Gui, Add, Link, x50 y250 w560, <a href="https://discord.gg/aMZY8yrF8r">Join ICF Automation Network Discord</a>
-Gui, Add, Link, x50 y280 w560, <a href="https://sites.google.com/view/icf-automation-network/">ICF Automation Network Website</a>
-Gui, Add, Text, x50 y310 w560, If it’s your first time, check all boxes in Settings.
-Gui, Add, Link, x50 y340 w560, <a href="https://docs.google.com/document/d/1WwWWMR-eN-R-GO42IioToHpWTgiXkLoiNE_4NeE-GsU/edit?usp=sharing">Future Macro Plans</a>
+Gui, Add, Link, x50 y250 w560, <a href="https://discord.com/invite/aMZY8yrF8r">Official PyWare Discord Server</a>
+Gui, Add, Link, x50 y280 w560, <a href="https://sites.google.com/view/icf-automation-network/?tab=t.0">Official PyWare Website</a>
+Gui, Add, Link, x50 y310 w560, <a href="https://docs.google.com/document/d/1WwWWMR-eN-R-GO42IioToHpWTgiXkLoiNE_4NeE-GsU/edit?tab=t.0">Upcoming Features</a>
+
+; Automatically Load Settings
+LoadSettings()
 
 ; Show Window
 Gui, Show
@@ -194,25 +203,40 @@ SaveSettings:
         GuiControlGet, CheckSeedShop
         GuiControlGet, CheckGearShop
         GuiControlGet, CheckEventShop
+	GuiControlGet, AutoBrainrotInvasion
         GuiControlGet, AutoAlign
         GuiControlGet, NoOfItems
+        GuiControlGet, PurchaseDelay
         GuiControlGet, MacroSpeed
         GuiControlGet, PrivateServerLink
 
         GuiControlGet, AdminAbuse
+        GuiControlGet, AutoCollectCash
         GuiControlGet, NavigationKey
+        GuiControlGet, BackpackKey
+
+        GuiControlGet, SendDiscordMessages
+        GuiControlGet, DiscordUserID
+        GuiControlGet, WebhookURL
 
         IniWrite, %CheckSeedShop%, %settingsFile%, Settings, CheckSeedShop
         IniWrite, %CheckGearShop%, %settingsFile%, Settings, CheckGearShop
         IniWrite, %CheckEventShop%, %settingsFile%, Settings, CheckEventShop
+        IniWrite, %AutoBrainrotInvasion%, %settingsFile%, Settings, AutoBrainrotInvasion
         IniWrite, %AutoAlign%, %settingsFile%, Settings, AutoAlign
-
         IniWrite, %NoOfItems%, %settingsFile%, Settings, NoOfItems
+        IniWrite, %PurchaseDelay%, %settingsFile%, Settings, PurchaseDelay
         IniWrite, %MacroSpeed%, %settingsFile%, Settings, MacroSpeed
         IniWrite, %PrivateServerLink%, %settingsFile%, Settings, PrivateServerLink
 
         IniWrite, %AdminAbuse%, %settingsFile%, Settings, AdminAbuse
+        IniWrite, %AutoCollectCash%, %settingsFile%, Settings, AutoCollectCash
         IniWrite, %NavigationKey%, %settingsFile%, Settings, NavigationKey
+        IniWrite, %BackpackKey%, %settingsFile%, Settings, BackpackKey
+
+	IniWrite, %SendDiscordMessages%, %settingsFile%, Discord Webhooks, SendDiscordMessages
+	IniWrite, %DiscordUserID%, %settingsFile%, Discord Webhooks, DiscordUserID
+	IniWrite, %WebhookURL%, %settingsFile%, Discord Webhooks, WebhookURL
 
         ; Save seeds
         Loop % seedItems.MaxIndex()
@@ -246,28 +270,41 @@ LoadSettings() {
         IniRead, CheckSeedShop, %settingsFile%, Settings, CheckSeedShop, 0
         IniRead, CheckGearShop, %settingsFile%, Settings, CheckGearShop, 0
         IniRead, CheckEventShop, %settingsFile%, Settings, CheckEventShop, 0
+        IniRead, AutoBrainrotInvasion, %settingsFile%, Settings, AutoBrainrotInvasion, 0
         IniRead, AutoAlign, %settingsFile%, Settings, AutoAlign, 0
         IniRead, NoOfItems, %settingsFile%, Settings, NoOfItems, 5
+        IniRead, PurchaseDelay, %settingsFile%, Settings, PurchaseDelay, 5
         IniRead, MacroSpeed, %settingsFile%, Settings, MacroSpeed, 5
         IniRead, PrivateServerLink, %settingsFile%, Settings, PrivateServerLink, 5
 
         IniRead, AdminAbuse, %settingsFile%, Settings, AdminAbuse, 0
+        IniRead, AutoCollectCash, %settingsFile%, Settings, AutoCollectCash, 0
         IniRead, NavigationKey, %settingsFile%, Settings, NavigationKey, \
         IniRead, BackpackKey, %settingsFile%, Settings, BackpackKey, %BackpackKey%
+
+	IniRead, SendDiscordMessages, %settingsFile%, Discord Webhooks, SendDiscordMessages, 0
+	IniRead, DiscordUserID, %settingsFile%, Discord Webhooks, DiscordUserID, 0
+	IniRead, WebhookURL, %settingsFile%, Discord Webhooks, WebhookURL, 0
 
         ; Update GUI controls 
         GuiControl,, CheckSeedShop, %CheckSeedShop%
         GuiControl,, CheckGearShop, %CheckGearShop%
         GuiControl,, CheckEventShop, %CheckEventShop%
-
+        GuiControl,, AutoBrainrotInvasion, %AutoBrainrotInvasion%
         GuiControl,, AutoAlign, %AutoAlign%
         GuiControl,, NoOfItems, %NoOfItems%
+        GuiControl,, PurchaseDelay, %PurchaseDelay%
         GuiControl,, MacroSpeed, %MacroSpeed%
         GuiControl,, PrivateServerLink, %PrivateServerLink%
 
         GuiControl,, AdminAbuse, %AdminAbuse%
+        GuiControl,, AutoCollectCash, %AutoCollectCash%
         GuiControl,, NavigationKey, %NavigationKey%
         GuiControl,, BackpackKey, %BackpackKey%
+
+        GuiControl,, SendDiscordMessages, %SendDiscordMessages%
+        GuiControl,, DiscordUserID, %DiscordUserID%
+        GuiControl,, WebhookURL, %WebhookURL%
 
         ; Load seeds
         Loop % seedItems.MaxIndex()
@@ -364,9 +401,9 @@ RunMacro:
 ; === Macro logic ===
 
 ToolTip, Beginning Alignment, %TooltipX%, %Tooltip1%, 1
-SmallSleepAmount := 100 / MacroSpeed
-MediumSleepAmount := 200 / MacroSpeed
-ShopDelayAmount := 2250
+MediumSleepAmount := 350 / MacroSpeed
+SmallSleepAmount := 150 / MacroSpeed
+TinySleepAmount := 80 / MacroSpeed
 if (!macroRunning)
     return
 
@@ -378,253 +415,248 @@ Loop, 10 {
     Send, {wheeldown}
     Sleep, %SmallSleepAmount%
 }
-Send, {rbutton up}
-Sleep, 50
-mousemove, LookDownX, LookDownY
-tooltip, Action: Position Mouse, %TooltipX%, %Tooltip8%, 8
-Sleep, 50
-Send, {rbutton down}
-tooltip, Action: Hold Right Click, %TooltipX%, %Tooltip8%, 8
-Sleep, 100
-DllCall("mouse_event", "UInt", 0x01, "UInt", 0, "UInt", 10000)
-tooltip, Action: Move Mouse Down, %TooltipX%, %Tooltip8%, 8
-Sleep, 100
-Send, {rbutton up}
-tooltip, Action: Release Right Click, %TooltipX%, %Tooltip8%, 8
-Sleep, 50
-mousemove, LookDownX, LookDownY
-tooltip, Action: Position Mouse, %TooltipX%, %Tooltip8%, 8
-Sleep, 50
-if (AutoAlign == true) {
+
+if (AutoAlign == true)
+{
         Send, {Esc}
-        Sleep, %ShopDelayAmount%
+        Sleep, 1450
         Send, {Tab}
         Sleep, 400
-        Send, {Down}
-        Sleep, %SmallSleepAmount%
-        
+	Loop, 18 {
+        	Send, {Down}
+        	Sleep, %TinySleepAmount%
+	}
+	Sleep, 100
         Loop, 2 {
                 Send, D
-                Sleep, %SmallSleepAmount%
+                Sleep, %TinySleepAmount%
         }
         Send, {Esc}
-        Sleep, %ShopDelayAmount%
+        Sleep, 1450
         Send, %NavigationKey%
-        Sleep, 350
-	AutoAlignNavigation()
+        Sleep, 250
+        
+        ; align camera to Steven's position
+        AutoAlignNavigation()
 
         Loop, 2 {
-		Sleep, 200
                 Send, {enter}
-                Sleep, 350 ; Can't change this
+                Sleep, %MediumSleepAmount%
                 CurrentLocation := "SeedShop"
                 Loop, 2 {
                         Send, {Right}
-                        Sleep, 100
+                        Sleep, 200
                 }
-		Sleep, 200
                 Send, {enter}
-                Sleep, 350 ; Can't change this
+                Sleep, %MediumSleepAmount%
                 CurrentLocation := "SellShop"
                 Loop, 2 {
                         Send, {Left}
-                        Sleep, 100
+                        Sleep, 200
                 }
         }
         Send, %NavigationKey%
-        Sleep, 350
+        Sleep, %MediumSleepAmount%
+
         Send, {Esc}
-        Sleep, %ShopDelayAmount%
+        Sleep, %MediumSleepAmount%0
         Send, {Tab}
         Sleep, 400
-        Send, {Down}
-        Sleep, %SmallSleepAmount%
-        
+	Loop, 18 {
+        	Send, {Down}
+        	Sleep, %TinySleepAmount%
+	}
+	Sleep, 100
         Loop, 2 {
                 Send, D
-                Sleep, %SmallSleepAmount%
+                Sleep, %TinySleepAmount%
         }
         Send, {Esc}
-        Sleep, %ShopDelayAmount%
-}
-if (CheckSeedShop) {
+        Sleep, 1450
         Send, %NavigationKey%
-        Sleep, 350
+        Sleep, %MediumSleepAmount%
         AutoAlignNavigation()
-        Sleep, 350
-	Send, {Enter}
-	Sleep, 350
-        Send, E
-        ToolTip, Current Location: Seed Shop, %TooltipX%, %Tooltip1%, 1
-        Sleep, %ShopDelayAmount%
-        AutoAlignShop()
+        Send, {Enter}
+        Sleep, 500
+}
+Send, %NavigationKey%
+Sleep, 500
+if (CheckSeedShop) {
+        CurrentLocation := "SeedShop"
+        ; Check seed shop
+        Send, {E}
+        Sleep, 1450
+	Message := "Seed Stock Update"
+	SendDiscordWebhook(WebhookURL, Message)
+        Send, %NavigationKey%
+        Sleep, 500
+	ToolTip, Seed Stock Opened, %TooltipX%, %Tooltip1%, 1
+	Loop, 2 {
+		Send, {Down}
+		Sleep, %SmallSleepAmount%
+	}
+	ToolTip, Current Location: Seed Shop, %TooltipX%, %Tooltip1%, 1
+        ; Buy only checked seeds
         Loop % seedItems.MaxIndex() {
                 idx := A_Index
                 GuiControlGet, isChecked,, Seed_%idx%
-                Tooltip, %seedName%, %TooltipX%, %Tooltip1%, 1
                 Sleep, %SmallSleepAmount%
+                
                 if (isChecked) {
-                        ; Show tooltip for current seed being purchased
-                        seedName := seedItems[idx]
-                        Sleep, 350
-                	Tooltip, %seedName%, %TooltipX%, %Tooltip1%, 1
-                        ; Select seed
-                        Send, {Enter}
+                        ; Show tooltip for current fruit being purchased
+			seedName := seedItems[idx]
+                        Tooltip, Seed_%idx%, %TooltipX%, %Tooltip1%, 1
                         Sleep, %SmallSleepAmount%
+        		Send, {Enter}
+        		Sleep, %SmallSleepAmount%
+			Send, {Down}
+			Sleep, %SmallSleepAmount%
+			Loop, %NoOfItems% {
+				Send, {Enter}
+				Sleep, %SmallSleepAmount%
+			}
                         Send, {Down}
-                        Sleep, %SmallSleepAmount%
-                        Send, {Left}
-                        Sleep, %SmallSleepAmount%
-                        Send, {Left}
-                        Sleep, 350
-                        ; Purchase multiple items
-                        Loop, %NoOfItems% {
-                                Send, {Enter}
-                                Sleep, %SmallSleepAmount%
-                        }
-                        Send, {Up}
-                        Sleep, %SmallSleepAmount%
-                        Send, {Enter}
-                        Sleep, 350
-                        Send, {Down}
-                        Sleep, %SmallSleepAmount%
-                        Send, {Down}
-                        Sleep, %SmallSleepAmount%
+                        Sleep, %MediumSleepAmount%
                 } else {
-                        ; Skip unchecked seed
-                        Send, {Down}
-                        Sleep, %SmallSleepAmount%
-                        Send, {Down}
-                        Sleep, 100
+                        Send, {Down} ; Move to next seed
+                	Sleep, %SmallSleepAmount%
                 }
         }
-        Send, {Right}
-        Sleep, 100
+
+        ; Reset position
         Loop % seedItems.MaxIndex() {
                 Send, {Up}
                 Sleep, %SmallSleepAmount%
-                Send, {Up}
-                Sleep, %SmallSleepAmount%
         }
-                Send, {Up}
-                Sleep, 100
-                Send, {Up}
-                Sleep, 100
-                Send, {Right}
-                Sleep, 350
-                Send, {Enter}
-                Sleep, 350
-		Send, %NavigationKey%
-}
-Send, %NavigationKey%
-Sleep, 350
-AutoAlignNavigation()
-Sleep, 350
-Send, {Enter}
-Sleep, 350
-Send, %NavigationKey%
-Sleep, 500
-Send, {S down}
-Send, {D down}
-Sleep, 2000
-Send, {S up}
-Sleep, 1250
-Send, {D up}
-Sleep, 500
-if (CheckGearShop) {
-        Send, E
-        ToolTip, Current Location: Gear Shop, %TooltipX%, %Tooltip1%, 1
-        Sleep, %ShopDelayAmount%
+        Sleep, %MediumSleepAmount%
+        ; Close shop
+        Send, {Up}
+        Sleep, %SmallSleepAmount%
+        Send, {Up}
+        Sleep, %SmallSleepAmount%
+        Send, {Right}
+        Sleep, %SmallSleepAmount%
+        Send, {Enter}
+        Sleep, %SmallSleepAmount%
+        ToolTip, Seed Shop Closed, %TooltipX%, %Tooltip1%, 1
+        Sleep, %SmallSleepAmount%
         Send, %NavigationKey%
-        Sleep, 350
-        AutoAlignShop()
+}
+; If not in gear shop then teleport to gear shop else press e
+if (CheckGearShop) {
+	Send, {S down}
+	Sleep, 1000
+	Send, {S up}
+} else {
+        Sleep, %SmallSleepAmount%
+}
+
+Sleep, %MediumSleepAmount%0
+if (CheckGearShop) {
+        CurrentLocation := "GearShop"
+        ; Check gear shop
+        Send, {E}
+        Sleep, 1450
+        Send, %NavigationKey%
+        Sleep, %SmallSleepAmount%
+
+        ToolTip, Gear Shop Opened, %TooltipX%, %Tooltip1%, 1
+	Loop, 2 {
+		Send, {Down}
+		Sleep, %SmallSleepAmount%
+	}
+        ToolTip, Current Location: Gear Shop, %TooltipX%, %Tooltip1%, 1
+        ; Buy only checked gears
         Loop % gearItems.MaxIndex() {
                 idx := A_Index
                 GuiControlGet, isChecked,, Gear%idx%
-                GearName := gearItems[idx]
                 Sleep, %SmallSleepAmount%
-                Tooltip, %GearName%, %TooltipX%, %Tooltip1%, 1
+                
                 if (isChecked) {
-			Tooltip, %GearName%, %TooltipX%, %Tooltip1%, 1
-                        Send, {Enter}
+                        ; Show tooltip for current fruit being purchased
+			gearName := gearItems[idx]
+                        Tooltip, Seed_%idx%, %TooltipX%, %Tooltip1%, 1
                         Sleep, %SmallSleepAmount%
-                        Send, {Down}
-                        Sleep, %SmallSleepAmount%
-                        Send, {Left}
-                        Sleep, %SmallSleepAmount%
-                        Send, {Left}
-                        Sleep, 350
-
-                        Loop, %NoOfItems% {
-                                Send, {Enter}
-                                Sleep, %SmallSleepAmount%
-                        }
-
-                        Send, {Up}
-                        Sleep, %SmallSleepAmount%
-                        Send, {Enter}
-                        Sleep, 350
-                        Send, {Down}
-                        Sleep, %SmallSleepAmount%
+        		Send, {Enter}
+        		Sleep, %SmallSleepAmount%
+			Send, {Down}
+			Sleep, %SmallSleepAmount%
+			Loop, %NoOfItems% {
+				Send, {Enter}
+				Sleep, %SmallSleepAmount%
+			}
                         Send, {Down}
                         Sleep, %SmallSleepAmount%
                 } else {
-                        Send, {Down}
-                        Sleep, %SmallSleepAmount%
-                        Send, {Down}
-                        Sleep, 100
+                        Send, {Down} ; Move to next seed
+                	Sleep, %SmallSleepAmount%
                 }
         }
-        Send, {Right}
-        Sleep, 100
+
+        ; Reset position
         Loop % gearItems.MaxIndex() {
                 Send, {Up}
                 Sleep, %SmallSleepAmount%
-                Send, {Up}
-                Sleep, %SmallSleepAmount%
         }
-                Send, {Up}
-                Sleep, 100
-                Send, {Up}
-                Sleep, 100
-                Send, {Right}
-                Sleep, 350
-                Send, {Enter}
-                Sleep, 350
-		Send, %NavigationKey%
+        Sleep, %MediumSleepAmount%
+        ; Close shop
+        Send, {Up}
+        Sleep, %SmallSleepAmount%
+        Send, {Up}
+        Sleep, %SmallSleepAmount%
+        Send, {Right}
+        Sleep, %SmallSleepAmount%
+        Send, {Enter}
+        Sleep, %SmallSleepAmount%
+        ToolTip, Gear Shop Closed, %TooltipX%, %Tooltip1%, 1
+        Sleep, %SmallSleepAmount%
+        Send, %NavigationKey%
 }
 if (AdminAbuse == false) {
         Loop
         {
-                FormatTime, CurrentMin,, m  ; Get current minute (00–59)
-        	ToolTip, Waiting for next stock, %TooltipX%, %Tooltip7%, 7
+                FormatTime, CurrentMin,, m                ; Get current minute (00–59)
                 if (Mod(CurrentMin, 5) = 0)   ; Check if divisible by 5
                 break
-                Sleep, 1000   ; wait 1 second before checking again
+                Sleep, %MediumSleepAmount%0   ; wait 1 second before checking again
                 Sleep, %SmallSleepAmount%
         }
+        ; Use ID 7 for waiting tooltip
+        ToolTip, Waiting for next stock, %TooltipX%, %Tooltip7%, 7
 }
 return
 
 AutoAlignNavigation() {
 	Send, {Up}
 	Sleep, %SmallSleepAmount%
+	Loop, 10 {
+		Send, {Left}
+		Sleep, %SmallSleepAmount%
+	}
 	Send, {Up}
 	Sleep, %SmallSleepAmount%
-	Send, {Right}
-	Sleep, %SmallSleepAmount%
+	Loop, 4 {
+		Send, {Right}
+		Sleep, %SmallSleepAmount%
+	}
 }
-AutoAlignShop() {
-	Send, {Right}
-        Sleep, 350
-	Send, {Right}
-        Sleep, 350
-	Send, {Down}
-        Sleep, 350
-	Send, {Down}
-        Sleep, 350
-	Send, {Enter}
-        Sleep, 350
-	Send, {Enter}
-        Sleep, 350
+TestWebhooks:
+Message := "Stock bot is working"
+status := SendDiscordWebhook(WebhookURL, Message)
+MsgBox, Webhook returned status: %status%
+return
+SendDiscordWebhook(url, message) {
+    try {
+        whr := ComObjCreate("WinHttp.WinHttpRequest.5.1")
+        whr.Open("POST", url, false)
+        whr.SetRequestHeader("Content-Type", "application/json")
+
+        json := "{""content"": """ . message . """}"
+
+        whr.Send(json)
+        return whr.Status
+    } catch e {
+        ToolTip, % "Webhook Error: " e.Message, %TooltipX%, %Tooltip9%, 9
+        return 0
+    }
 }
