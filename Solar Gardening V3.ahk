@@ -1,5 +1,5 @@
 ﻿; ============================================================
-; PyWare Gardening V3.01
+; Solar Gardening V3.2
 ; ============================================================
 #SingleInstance Force
 FileEncoding, UTF-8
@@ -163,11 +163,11 @@ Gui, Font, s9 cFFFFFF Bold
 Gui, Add, GroupBox, x30 y40 w600 h160, About this macro
 Gui, Font, s9 cFFFFFF Norm
 
-Gui, Add, Picture, x50 y60 w48 h48, % mainDir "Images\\PyWareGardening.png"
+Gui, Add, Picture, x50 y60 w48 h48, % mainDir "Images\\SolarGardening.png"
 Gui, Font, s9 cFFD700 Bold
 Gui, Add, Text, x110 y60 w350, Catman2608
 Gui, Font, s9 cFFC0CB Bold
-Gui, Add, Text, x110 y80 w350, PyWare Gardening V3.01
+Gui, Add, Text, x110 y80 w350, Solar Gardening V3.2
 Gui, Font, s9 cFFFFFF Norm
 
 ; Disclaimer section
@@ -183,9 +183,9 @@ Gui, Add, GroupBox, x30 y220 w600 h180, Resources
 Gui, Font, s9 cFFFFFF Norm
 
 ; Links with proper spacing
-Gui, Add, Link, x50 y250 w560, <a href="https://discord.com/invite/aMZY8yrF8r">Join PyWare Discord Server</a>
+Gui, Add, Link, x50 y250 w560, <a href="https://discord.com/invite/aMZY8yrF8r">Join Solar Discord Server</a>
 Gui, Add, Link, x50 y280 w560, <a href="https://www.youtube.com/@HexaTitanGaming/">Official YouTube Channel</a>
-Gui, Add, Link, x50 y310 w560, <a href="https://sites.google.com/view/icf-automation-network/?tab=t.0">Official PyWare Website</a>
+Gui, Add, Link, x50 y310 w560, <a href="https://sites.google.com/view/icf-automation-network/?tab=t.0">Official Solar Website</a>
 Gui, Add, Link, x50 y340 w560, <a href="https://docs.google.com/document/d/1WwWWMR-eN-R-GO42IioToHpWTgiXkLoiNE_4NeE-GsU/edit?tab=t.0">Upcoming Features</a>
 
 ; Automatically Load Settings
@@ -418,24 +418,7 @@ Loop, 10 {
 	Sleep, %SmallSleepAmount%
 }
 
-if (AutoAlign == true)
-{
-	Send, {Esc}
-	Sleep, 1450
-	Send, {Tab}
-	Sleep, 400
-	Loop, 18 {
-		Send, {Down}
-		Sleep, %TinySleepAmount%
-	}
-	; Wait for it to load
-	Sleep, 200
-	Loop, 2 {
-		Send, D
-		Sleep, %TinySleepAmount%
-	}
-	Send, {Esc}
-	Sleep, 1450
+if (AutoAlign == true) {
 	Send, %NavigationKey%
 	Sleep, 250
 	
@@ -445,39 +428,21 @@ if (AutoAlign == true)
 	Loop, 2 {
 		Send, {enter}
 		Sleep, %MediumSleepAmount%
-		CurrentLocation := "SeedShop"
 		Loop, 2 {
 			Send, {Right}
-			Sleep, 200
+			Sleep, %MediumSleepAmount%
+			Send, {enter}
+			Sleep, %MediumSleepAmount%
 		}
-		Send, {enter}
-		Sleep, %MediumSleepAmount%
-		CurrentLocation := "SellShop"
 		Loop, 2 {
 			Send, {Left}
-			Sleep, 200
+			Sleep, %MediumSleepAmount%
+			Send, {enter}
+			Sleep, %MediumSleepAmount%
 		}
 	}
 	Send, %NavigationKey%
-	Sleep, %MediumSleepAmount%
-
-	Send, {Esc}
-	Sleep, %MediumSleepAmount%0
-	Send, {Tab}
-	Sleep, 400
-	Loop, 18 {
-		Send, {Down}
-		Sleep, %TinySleepAmount%
-	}
-	Sleep, 100
-	Loop, 2 {
-		Send, D
-		Sleep, %TinySleepAmount%
-	}
-	Send, {Esc}
-	Sleep, 1450
-	Send, %NavigationKey%
-	Sleep, %MediumSleepAmount%
+	Sleep, %SmallSleepAmount%
 	AutoAlignNavigation()
 	Send, {Enter}
 	Sleep, 500
@@ -503,8 +468,10 @@ if (CheckSeedShop) {
 		Sleep, %SmallSleepAmount%
 	}
 	PixelSearch, FoundX, FoundY, 1380, 300, 1440, 900, 0xFFFFFF, 5, Fast
+	Sleep, %SmallSleepAmount%
 	if (ErrorLevel = 0) {
 		Send, {Down}
+		Sleep, %SmallSleepAmount%
 	}
 	Sleep, %SmallSleepAmount%
 	Send, {Enter}
@@ -570,12 +537,12 @@ if (CheckSeedShop) {
 }
 ; If not in gear shop then teleport to gear shop else press e
 if (CheckGearShop) {
-	Send, {D down}
-	Sleep, 1500
-	Send, {D up}
 	Send, {S down}
-	Sleep, 1500
+	Sleep, 2000
 	Send, {S up}
+	Send, {A down}
+	Sleep, 600
+	Send, {A up}
 } else {
 	Sleep, %SmallSleepAmount%
 }
@@ -687,6 +654,7 @@ AutoAlignNavigation() {
 		Send, {Left}
 		Sleep, %SmallSleepAmount%
 	}
+	Send, {Right}
 	Sleep, %MediumSleepAmount%
 }
 TestWebhooks:

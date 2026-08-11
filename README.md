@@ -1,5 +1,5 @@
-# PyWare Gardening Macro by Catman2608
-An AutoHotKey macro for the Roblox game "PyWare Gardening" (formerly Grow A Garden and Garden Horizons)
+# Solar Gardening Macro by Catman2608
+An AutoHotKey macro for the Roblox game "Solar Gardening" (formerly Grow A Garden and Garden Horizons)
 
 ## 📋 Prerequisites
 - **AutoHotKey v1.1** (NOT v2.0) - [Download here](https://www.autohotkey.com/)
@@ -49,7 +49,7 @@ I'll add a helpful AI-assisted update feature to make this process much smoother
 If you prefer to do it manually, follow these steps:
 
 #### Accessing the Code
-1. Right-click on `PyWare Gardening V3.ahk`
+1. Right-click on `Solar Gardening V3.ahk`
 2. Select **"Edit with Notepad"** (or any text editor - DO NOT use Microsoft Word)
 
 #### Finding the Right Section
@@ -86,7 +86,7 @@ Want to contribute your new seeds/gears back to the project? Follow this guide:
 - Click "Sign up" and follow the registration process
 
 **2. Fork the Repository**
-- Navigate to the original repository: `https://github.com/your-repo/pyware-gardening`
+- Navigate to the original repository: `https://github.com/your-repo/Solar-gardening`
 - Click the **"Fork"** button (top-right corner of the page)
 - Select your account as the destination
 - Wait a few seconds for GitHub to create your copy
@@ -94,21 +94,21 @@ Want to contribute your new seeds/gears back to the project? Follow this guide:
 **3. Clone Your Fork (Optional - for local changes)**
 ```bash
 # Copy your fork's URL (it will look like this)
-git clone https://github.com/YOUR-USERNAME/pyware-gardening.git
+git clone https://github.com/YOUR-USERNAME/Solar-gardening.git
 
 # Navigate to the folder
-cd pyware-gardening
+cd Solar-gardening
 ```
 
 **4. Make Your Changes**
-- Edit the `PyWare Gardening V3.ahk` file
+- Edit the `Solar Gardening V3.ahk` file
 - Add your new seeds/gears to the arrays
 - Save the file
 
 **5. Commit and Push Changes**
 ```bash
 # Add your changes
-git add PyWare\ Gardening\ V3.ahk
+git add Solar\ Gardening\ V3.ahk
 
 # Commit with a descriptive message
 git commit -m "Added new seeds: Tomato, Pepper, Basil"

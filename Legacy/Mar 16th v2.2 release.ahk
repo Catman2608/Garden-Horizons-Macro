@@ -1,5 +1,5 @@
 ﻿; ============================================================
-; PyWare Gardening V2.2 (Merged from Garden Horizons macro June 17th)
+; Solar Gardening V2.2 (Merged from Garden Horizons macro June 17th)
 ; ============================================================
 #SingleInstance Force
 FileEncoding, UTF-8
